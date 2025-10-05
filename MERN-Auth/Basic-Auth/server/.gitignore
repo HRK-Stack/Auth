@@ -1,0 +1,82 @@
+# -----------------------------
+# Node.js Essentials
+# -----------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+
+# -----------------------------
+# Environment & Secrets
+# -----------------------------
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# -----------------------------
+# Build / Logs
+# -----------------------------
+dist/
+build/
+coverage/
+logs/
+*.log
+
+# -----------------------------
+# OS / Editor Files
+# -----------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.iml
+
+# -----------------------------
+# Temporary / Cache Files
+# -----------------------------
+.tmp/
+.cache/
+.nyc_output/
+babel-cache/
+*.pid
+*.seed
+*.pid.lock
+
+# -----------------------------
+# Mongoose / DB Dumps
+# -----------------------------
+dump/
+*.bson
+*.json
+
+# -----------------------------
+# Uploads / Public Data
+# -----------------------------
+uploads/
+public/temp/
+storage/
+
+# -----------------------------
+# PM2 / Process Managers
+# -----------------------------
+pids/
+pids/*
+*.pid
+*.seed
+*.pid.lock
+
+# -----------------------------
+# TypeScript (if used later)
+# -----------------------------
+*.tsbuildinfo
+
+# -----------------------------
+# Misc
+# -----------------------------
+.env.example
