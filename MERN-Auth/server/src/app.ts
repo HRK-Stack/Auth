@@ -1,5 +1,4 @@
 import express from "express"
-import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
@@ -7,11 +6,10 @@ import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 import morgan from "morgan"
 import rateLimit from "express-rate-limit";
+
 import connectDB from "./config/db.js";
 // import authRoutes from "./routes/authRoutes.js";
 
-
-dotenv.config({path:'./config/.env'});
 connectDB();
 
 const app = express();
