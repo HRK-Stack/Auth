@@ -1,36 +1,53 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import config from '../config/config.js';
 
-interface IUser extends Document {
-    name:string,
-    email:string,
-    password:string,
-    verified:boolean,
-    comparePassword(candidate:string):Promise<boolean>
+export interface IUser extends mongoose.Document {
+    email: string;
+    password?: string;
+    name?: string;
+    isEmailVerified: boolean;
+    provider?: string;
+    providerId?: string;
+    roles: string[];
+    failedLoginAttempts: number;
+    lockUntil?: Date | null;
 }
 
-const userSchema = new Schema<IUser>(
-    {
-        name:{type:String, required:true,trim:true},
-        email:{type:String,required:true,unique:true,lowercase:true},
-        password:{type:String,required:true,select:false,minlength:6},
-        verified:{type:Boolean,default:false},
-    },
-    {
-        timestamps:true
+const UserSchema = new mongoose.Schema<IUser>({
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    password: { type: String },
+    name: { type: String },
+    isEmailVerified: { type: Boolean, default: false },
+    provider: { type: String, default: 'local' },
+    providerId: { type: String },
+    roles: { type: [String], default: ['user'] },
+    failedLoginAttempts: { type: Number, default: 0 },
+    lockUntil: { type: Date, default: null },
+}, 
+{ 
+    timestamps: true,
+    toJSON:{
+        transform(doc, ret) {
+            const {__v,password,...user} = ret
+            return user;
+        },
     }
-);
+});
 
-userSchema.pre("save",async function(next){
-    if(!this.isModified('password')) return next()
+UserSchema.pre("save",async function(next){
+    if( !this.password || !this.isModified('password')) return next()
     const salt = await bcrypt.genSalt(config.bcryptSaltRounds);
     this.password = await bcrypt.hash(this.password,salt);
     next();
 })
 
-userSchema.methods.comparePassword = async function(candidate:string){
+UserSchema.methods.comparePassword = async function(candidate:string){
     return bcrypt.compare(candidate,this.password);
 }
 
-export default mongoose.model<IUser>("User",userSchema);
+UserSchema.methods.isLocked = function(){
+    return !!(this.lockUntil && this.lockUntil > new Date());
+}
+
+export default mongoose.model<IUser>('User', UserSchema);
