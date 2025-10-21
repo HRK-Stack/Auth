@@ -16,7 +16,7 @@ export interface IUser extends mongoose.Document {
 
 const UserSchema = new mongoose.Schema<IUser>({
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    password: { type: String },
+    password: { type: String ,minLength:8,maxLength:64},
     name: { type: String },
     isEmailVerified: { type: Boolean, default: false },
     provider: { type: String, default: 'local' },
@@ -34,6 +34,8 @@ const UserSchema = new mongoose.Schema<IUser>({
         },
     }
 });
+
+UserSchema.index({email:1},{unique:true});
 
 UserSchema.pre("save",async function(next){
     if( !this.password || !this.isModified('password')) return next()
