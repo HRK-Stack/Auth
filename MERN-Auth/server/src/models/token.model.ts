@@ -1,6 +1,6 @@
 import mongoose, { Types } from "mongoose";
 
-interface IToken {
+interface IToken extends mongoose.Document {
     userId : mongoose.Types.ObjectId,
     tokenHash : string,
     type : 'reset-password' | 'verify-email',
